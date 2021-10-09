@@ -5,12 +5,28 @@
       </h1>
 
       <template v-for="(answer, index) in this.answers" :key="index">
-        <input type="radio" name="options" value="answer">
+        <input 
+          type="radio" 
+          name="options" 
+          :value="answer" 
+          v-model="this.chosenAnswer" 
+          :disabled="this.answerSubmitted"
+        >
         <label v-html="answer"></label><br>
       </template>
-    </template>
 
-    <button class="send" type="button">Send</button>
+      <button class="send" type="button" @click="this.submitAnswer" v-if="!this.answerSubmitted">Send</button>
+
+      <section class="result" v-if="this.answerSubmitted">
+        <h4 v-if="this.chosenAnswer == this.correctAnswer">
+          &#10060; I'm sorry, you picked the wrond answer. The correct is "{{this.correctAnswer}}".
+        </h4>
+        <h4 v-else>
+          <h4>&#9989; Congratulations, the answer "{{this.correctAnswer}}" is correct.</h4>
+        </h4>
+        <button class="send" type="button">Next question</button>
+      </section>
+    </template>
   </div>
 </template>
 
@@ -22,7 +38,9 @@ export default {
     return {
       question: undefined,
       incorrectAnswers: undefined,
-      correctAnswers: undefined
+      correctAnswers: undefined,
+      chosenAnswer: undefined,
+      answerSubmitted: false
     }
   },
   computed: {
@@ -31,6 +49,20 @@ export default {
       answers.splice(Math.round(Math.random() * answers.length), 0, this.correctAnswers);
       console.log(answers);
       return answers;
+    }
+  },
+  methods: {
+    submitAnswer() {
+      if (!this.chosenAnswer) {
+        alert('Pick one of the options');
+      } else {
+        this.answerSubmitted = true;
+        if (this.chosenAnswer == this.correctAnswers) {
+
+        } else {
+
+        }
+      }
     }
   },
   created() {
